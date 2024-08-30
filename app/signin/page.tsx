@@ -1,0 +1,12 @@
+import LoginCard from "@/src/components/common/LoginCard";
+import React from "react";
+
+const SignInPage: React.FC = async () => {
+  return (
+    <section className="container px-3 sm:px-8 h-full flex justify-center items-center">
+      <LoginCard />
+    </section>
+  );
+};
+
+export default SignInPage;
