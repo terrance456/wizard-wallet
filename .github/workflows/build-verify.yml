@@ -1,0 +1,28 @@
+name: Build verify
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - "feat/**"
+      - "bugfix/**"
+      - "refactor/**"
+
+jobs:
+  build-ui:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js 20.13.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.13.1
+
+      - name: Npm install
+        run: npm ci
+
+      - name: Npm run Build
+        run: npm run build
