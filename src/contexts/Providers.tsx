@@ -1,3 +1,4 @@
+import { SessionProvider } from "next-auth/react";
 import dynamic from "next/dynamic";
 import React, { PropsWithChildren } from "react";
 
@@ -5,9 +6,11 @@ const ThemeProvider = dynamic(() => import("./ThemeContext"), { ssr: false, load
 
 const Providers: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-      {children}
-    </ThemeProvider>
+    <SessionProvider>
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        {children}
+      </ThemeProvider>
+    </SessionProvider>
   );
 };
 

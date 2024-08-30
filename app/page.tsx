@@ -1,9 +1,9 @@
-import { Button } from "@/src/components/ui/button";
+import SignIn from "@/src/components/signin/signin";
 
 export default function Home() {
   return (
     <main>
-      <Button variant="secondary">Click me</Button>
+      <SignIn />
     </main>
   );
 }
