@@ -4,7 +4,9 @@ import { User } from "next-auth";
 import { z } from "zod";
 
 const createMonthlyDebtSchema = z.object({
-  name: z.string().min(1).max(50),
+  title: z.string().min(1).max(50),
+  subTitle: z.string().min(1).max(50),
+  content: z.string().min(1).max(100),
   amount: z.number().max(100_000_0000),
   category: z.string().min(1).max(50).optional(),
   positionIndex: z.number().max(10),
