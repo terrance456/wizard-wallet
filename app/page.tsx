@@ -4,7 +4,7 @@ import ExpensesView from "@/src/components/common/main/ExpensesView";
 import { MonthlyDebt } from "@prisma/client";
 
 export default async function Home() {
-  const monthDebtList: Array<MonthlyDebt> = await nextFetch(ApiRoutes.getMonthDebts);
+  const monthDebtList: Array<MonthlyDebt> = await nextFetch(ApiRoutes.getMonthDebts, { next: { tags: ["getMonthDebtList"] } });
 
   return (
     <main className="container px-3 sm:px-8 h-full">
