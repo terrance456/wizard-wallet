@@ -7,4 +7,5 @@ export enum ApiRoutes {
   addMonthlyDebt = ApiBasePath.basePath + "/add-monthly-debt",
   updatePosition = ApiBasePath.basePath + "/update-position",
   deleteDebt = ApiBasePath.basePath + "/remove-monthly-debt",
+  updatePaidStatus = ApiBasePath.basePath + "/update-paid-status",
 }

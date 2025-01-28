@@ -10,7 +10,7 @@ const updatePositionSchema = z.array(
 
 type PositionListRequest = z.infer<typeof updatePositionSchema>;
 
-export async function PUT(request: Request) {
+export async function PATCH(request: Request) {
   try {
     const requestBody = await request.json();
     const validateRequest = updatePositionSchema.safeParse(requestBody);
