@@ -6,7 +6,7 @@ import { z } from "zod";
 const createMonthlyDebtSchema = z.object({
   title: z.string().min(1).max(50),
   subTitle: z.string().min(1).max(50),
-  content: z.string().min(1).max(100),
+  content: z.string().min(1).max(100).optional(),
   amount: z.number().max(100_000_0000),
   category: z.string().min(1).max(50).optional(),
   positionIndex: z.number().max(10),
