@@ -12,6 +12,9 @@ import { revalidateNextTags } from "@/src/actions";
 import AddExpensesDialog, { AddExpensesSchemaT } from "./AddExpensesDialog";
 import { debounce } from "@/src/utils";
 import { cn } from "@/lib/utils";
+import { Pencil1Icon, PlusIcon } from "@radix-ui/react-icons";
+import { useToast } from "@/src/hooks/use-toast";
+import BalanceAmount from "./BalanceAmount";
 
 interface ExpensesViewProps {
   data: Array<MonthlyDebt>;
@@ -31,12 +34,15 @@ const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => 
   const [currentDeleteDebt, setCurrentDeleteDebt] = React.useState<MonthlyDebt | null>(null);
   const [isLoadingDelete, setIsLoadingDelete] = React.useState<boolean>(false);
   const [showAddExpensesModal, setShowAddExpensesModal] = React.useState<boolean>(false);
+  const [addExpensesError, setAddExpensesError] = React.useState<string>("");
+  const { toast } = useToast();
 
   const onClickEdit = () => {
     setIsEdit((prevEdit: boolean) => !prevEdit);
   };
 
   const onClickAddExpenses = () => {
+    setAddExpensesError("");
     setShowAddExpensesModal(true);
   };
 
@@ -58,6 +64,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => 
       await nextFetch(ApiRoutes.deleteDebt, { method: "DELETE", body: JSON.stringify({ id: currentDeleteDebt?.id }) }, false);
       await revalidateNextTags("getMonthDebtList");
     } catch {
+      toast({ title: "Uh oh! Something went wrong.", description: "There was a problem with your request.", variant: "destructive" });
     } finally {
       setIsLoadingDelete(false);
       setConfirmDialog(null);
@@ -66,11 +73,14 @@ const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => 
   };
 
   const onAddExpenses = async (info: AddExpensesSchemaT) => {
+    setAddExpensesError("");
     try {
       await nextFetch(ApiRoutes.addMonthlyDebt, { method: "POST", body: JSON.stringify({ ...info, positionIndex: list.length + 1 }) }, false);
       await revalidateNextTags("getMonthDebtList");
       setShowAddExpensesModal(false);
-    } catch {}
+    } catch {
+      setAddExpensesError("Failed to submit new expenses, please try again");
+    }
   };
 
   const onCancel = () => {
@@ -89,6 +99,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => 
       await nextFetch(ApiRoutes.updatePaidStatus, { method: "PATCH", body: JSON.stringify({ id: item.id, pending: !item.pending }) }, false);
     } catch {
       setList((prevList: Array<MonthlyDebt>) => prevList.map((prevItem: MonthlyDebt) => (prevItem.id === item.id ? { ...prevItem, pending: !item.pending } : prevItem)));
+      toast({ title: "Uh oh! Something went wrong.", description: "There was a problem with your request.", variant: "destructive" });
     }
   };
 
@@ -100,14 +111,17 @@ const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => 
 
   return (
     <>
-      <section className="w-full mt-5">
-        <div className="flex justify-end">
-          <Button variant="secondary" size="sm" className="mr-3" onClick={onClickAddExpenses}>
-            Add expenses
-          </Button>
-          <Button size="sm" onClick={onClickEdit}>
-            Edit
-          </Button>
+      <section className="w-full mt-5 pb-5">
+        <div className="flex flex-col items-start sm:justify-between sm:flex-row sm:items-center">
+          <BalanceAmount data={list} />
+          <div className="sm:mt-0 mt-3">
+            <Button variant="secondary" size="sm" className="mr-3" onClick={onClickAddExpenses}>
+              Add expenses <PlusIcon className="ms-1" />
+            </Button>
+            <Button size="sm" onClick={onClickEdit}>
+              Edit <Pencil1Icon className="ms-1" />
+            </Button>
+          </div>
         </div>
         <div className="flex justify-center">
           <div className={cn("flex flex-col gap-3 mt-5 xl:w-[65%] lg:w-[75%] md:w-[90%] w-full mb-3", isEdit && "xl:w-[75%] lg:w-[85%] md:w-[100%]")}>
@@ -121,7 +135,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => 
           </div>
         </div>
       </section>
-      {showAddExpensesModal && <AddExpensesDialog open onOpenChange={() => setShowAddExpensesModal(false)} onSubmission={onAddExpenses} />}
+      {showAddExpensesModal && <AddExpensesDialog open onOpenChange={() => setShowAddExpensesModal(false)} onSubmission={onAddExpenses} error={addExpensesError} />}
       {confirmDialog && <ConfirmDialog {...confirmDialog} onOpenChange={() => setConfirmDialog(null)} header="Are you sure?" onConfirm={onDelete} onCancel={onCancel} isLoading={isLoadingDelete} />}
     </>
   );
