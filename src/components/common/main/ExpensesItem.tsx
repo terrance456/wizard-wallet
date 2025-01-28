@@ -13,7 +13,7 @@ export interface ExpensesItemProps {
   dragAttrHandler: AttributesDnDT;
   dragListnerHandler: ListnersDnDT;
   isEdit?: boolean;
-  onMarkAsDone: () => void;
+  onMarkAsPaid: () => void;
   onDelete: (info: MonthlyDebt) => void;
 }
 
@@ -31,14 +31,21 @@ const ExpensesItem: React.FC<ExpensesItemProps> = (props: ExpensesItemProps) => 
             <div className="flex items-center gap-2">
               <div className="font-semibold">{props.info.title}</div>
             </div>
-            <div className="ml-auto text-xs text-muted-foreground">{new Date(props.info.createdAt).toISOString()}</div>
+            <div className="ml-auto">
+              {props.info.pending ? (
+                <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-yellow-900 dark:text-yellow-300">Unpaid</span>
+              ) : (
+                <span className="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-sm dark:bg-green-900 dark:text-green-300">Paid</span>
+              )}
+              {/* <span className=" text-xs text-muted-foreground">{new Date(props.info.createdAt).toISOString()}</span> */}
+            </div>
           </div>
           <div className="text-xs font-medium">{props.info.subTitle}</div>
         </div>
         <div className="line-clamp-2 text-xs text-muted-foreground">{props.info.content}</div>
         <div className="flex items-center gap-2">
-          <Button size="sm" className="text-xs h-6 mt-3">
-            Mark as done
+          <Button size="sm" className="text-xs h-6 mt-3" onClick={props.onMarkAsPaid}>
+            Mark as {props.info.pending ? "paid" : "unpaid"}
           </Button>
         </div>
       </div>
