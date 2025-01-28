@@ -11,6 +11,7 @@ on:
 
 jobs:
   build-ui:
+    name: Build UI
     runs-on: ubuntu-latest
 
     steps:
