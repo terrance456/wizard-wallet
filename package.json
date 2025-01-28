@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma-migrate": "prisma migrate dev --preview-feature"
+    "prisma-migrate": "prisma migrate dev --preview-feature",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build"
   },
   "dependencies": {
     "@dnd-kit/sortable": "^8.0.0",
