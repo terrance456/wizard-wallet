@@ -4,13 +4,14 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - main
+      - master
       - feat/**
       - bugfix/**
       - refactor/**
 
 jobs:
   build-ui:
+    name: Build UI
     runs-on: ubuntu-latest
 
     steps:

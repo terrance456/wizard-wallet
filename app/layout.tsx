@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import Providers from "@/src/contexts/Providers";
-import "./globals.css";
+import { Toaster } from "@/src/components/ui/toaster";
 import Nav from "@/src/components/common/Nav";
+import "./globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
           <Nav />
           {children}
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

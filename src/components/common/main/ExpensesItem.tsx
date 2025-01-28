@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../../ui/button";
 import { type useSortable } from "@dnd-kit/sortable";
-import { DragHandleDots2Icon, TrashIcon } from "@radix-ui/react-icons";
+import { CheckIcon, DragHandleDots2Icon, TimerIcon, TrashIcon } from "@radix-ui/react-icons";
 import { MonthlyDebt } from "@prisma/client";
 
 type AttributesDnDT = ReturnType<typeof useSortable>["attributes"];
@@ -13,7 +13,7 @@ export interface ExpensesItemProps {
   dragAttrHandler: AttributesDnDT;
   dragListnerHandler: ListnersDnDT;
   isEdit?: boolean;
-  onMarkAsDone: () => void;
+  onMarkAsPaid: () => void;
   onDelete: (info: MonthlyDebt) => void;
 }
 
@@ -31,22 +31,32 @@ const ExpensesItem: React.FC<ExpensesItemProps> = (props: ExpensesItemProps) => 
             <div className="flex items-center gap-2">
               <div className="font-semibold">{props.info.title}</div>
             </div>
-            <div className="ml-auto text-xs text-muted-foreground">{new Date(props.info.createdAt).toISOString()}</div>
+            <div className="ml-auto">
+              <Button variant="outline" size="sm" className="text-xs h-6 mt-2" onClick={props.onMarkAsPaid}>
+                {props.info.pending ? (
+                  <span className="flex ">
+                    unpaid <TimerIcon className="ms-1 text-yellow-600" />
+                  </span>
+                ) : (
+                  <span className="flex ">
+                    paid <CheckIcon className="ms-1 text-green-700" />
+                  </span>
+                )}
+              </Button>
+            </div>
           </div>
-          <div className="text-xs font-medium">{props.info.subTitle}</div>
+          <div className="text-xs text-muted-foreground">{props.info.subTitle}</div>
         </div>
-        <div className="line-clamp-2 text-xs text-muted-foreground">{props.info.content}</div>
-        <div className="flex items-center gap-2">
-          <Button size="sm" className="text-xs h-6 mt-3">
-            Mark as done
+        <div className="flex w-full justify-between gap-2">
+          <span className="line-clamp-2 text-2xl font-bold">RM {props.info.amount}</span>
+          <div className="flex flex-col"></div>
+        </div>
+        {props.isEdit && (
+          <Button size="sm" className="text-xs h-6" variant="destructive" onClick={() => props.onDelete(props.info)}>
+            Remove <TrashIcon className="ms-1" />
           </Button>
-        </div>
+        )}
       </div>
-      {props.isEdit && (
-        <Button variant="destructive" size="icon" className="h-7 w-7" onClick={() => props.onDelete(props.info)}>
-          <TrashIcon className="h-5 w-5 cursor-pointer" />
-        </Button>
-      )}
     </div>
   );
 };

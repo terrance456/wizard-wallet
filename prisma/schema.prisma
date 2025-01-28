@@ -26,7 +26,7 @@ model MonthlyDebt {
   userId     String
   title      String
   subTitle   String
-  content    String
+  content    String?
   amount     Int 
   category   String?
   pending    Boolean

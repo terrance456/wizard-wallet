@@ -13,7 +13,6 @@ const stringValidation = z.string().min(1, { message: "Must be at least 1 charac
 const AddExpensesSchema = z.object({
   title: stringValidation,
   subTitle: stringValidation,
-  content: stringValidation,
   amount: z.number({ message: "Required field" }).max(10000000, "Cannot exceed 10000000."),
 });
 
@@ -23,9 +22,10 @@ interface AddExpensesDialogProps {
   open?: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmission: (data: AddExpensesSchemaT) => Promise<any>;
+  error?: string;
 }
 
-const AddExpensesDialog: React.FC<AddExpensesDialogProps> = ({ onSubmission, ...props }: AddExpensesDialogProps) => {
+const AddExpensesDialog: React.FC<AddExpensesDialogProps> = ({ onSubmission, error, ...props }: AddExpensesDialogProps) => {
   const {
     register,
     handleSubmit,
@@ -66,10 +66,6 @@ const AddExpensesDialog: React.FC<AddExpensesDialogProps> = ({ onSubmission, ...
             <Input disabled={isFormLoading} placeholder="Every month RM 1000" id="notes" wrapperClassName="col-span-3" {...register("subTitle")} errorMessage={errors.subTitle?.message} />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="content">Content</Label>
-            <Input disabled={isFormLoading} placeholder="remaining 5000" id="content" wrapperClassName="col-span-3" {...register("content")} errorMessage={errors.content?.message} />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="amount">Amount</Label>
             <Input type="number" disabled={isFormLoading} placeholder="10000" id="amount" wrapperClassName="col-span-3" {...register("amount", { valueAsNumber: true })} errorMessage={errors.amount?.message} />
           </div>
@@ -80,6 +76,7 @@ const AddExpensesDialog: React.FC<AddExpensesDialogProps> = ({ onSubmission, ...
             {isFormLoading && <Loader2 className="animate-spin ml-1 h-3 w-3" />}
           </Button>
         </DialogFooter>
+        {error && <span className="text-sm text-red-700">{error}</span>}
       </DialogContent>
     </Dialog>
   );
