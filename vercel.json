@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/reset-paid-status",
+      "schedule": "*/2 * * * *"
+    }
+  ]
+}
