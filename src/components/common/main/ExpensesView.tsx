@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "../../ui/button";
 import { MonthlyDebt } from "@prisma/client";
 import SortableExpensesItem from "./SortableExpensesItem";
-import { DndContext, closestCenter, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { DndContext, closestCenter, PointerSensor, useSensor, useSensors, TouchSensor } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { nextFetch } from "@/src/apis/fetch";
 import { ApiRoutes } from "@/src/apis/routes.enum";
@@ -28,7 +28,7 @@ const initialSort = (data: Array<MonthlyDebt>) => {
 
 const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => {
   const [list, setList] = React.useState<Array<MonthlyDebt>>(initialSort(props.data));
-  const sensors = useSensors(useSensor(PointerSensor));
+  const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor));
   const [isEdit, setIsEdit] = React.useState<boolean>(false);
   const [confirmDialog, setConfirmDialog] = React.useState<Pick<ConfirmDialogProps, "content" | "open"> | null>(null);
   const [currentDeleteDebt, setCurrentDeleteDebt] = React.useState<MonthlyDebt | null>(null);
@@ -125,7 +125,7 @@ const ExpensesView: React.FC<ExpensesViewProps> = (props: ExpensesViewProps) => 
         </div>
         <div className="flex justify-center">
           <div className={cn("flex flex-col gap-3 mt-5 xl:w-[65%] lg:w-[75%] md:w-[90%] w-full mb-3", isEdit && "xl:w-[75%] lg:w-[85%] md:w-[100%]")}>
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <DndContext autoScroll={{ threshold: { x: 0, y: 0.01 } }} sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={list} strategy={verticalListSortingStrategy}>
                 {list.map((item: MonthlyDebt) => (
                   <SortableExpensesItem key={item.id} dragId={item.id} info={item} onMarkAsPaid={() => debouncedOnMarkAsPaid(item)} isEdit={isEdit} onDelete={showConfirmModal} />

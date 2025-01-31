@@ -21,7 +21,7 @@ const ExpensesItem: React.FC<ExpensesItemProps> = (props: ExpensesItemProps) => 
   return (
     <div className="flex items-center gap-2 rounded-lg border p-3 text-left text-sm transition-all dark:bg-slate-900 bg-white">
       {props.isEdit && (
-        <div {...props.dragAttrHandler} {...props.dragListnerHandler}>
+        <div {...props.dragAttrHandler} {...props.dragListnerHandler} className="touch-none">
           <DragHandleDots2Icon className="h-5 w-5 mr-3 cursor-grab" />
         </div>
       )}
