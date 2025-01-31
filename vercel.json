@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/reset-paid-status",
-      "schedule": "*/2 * * * *"
+      "schedule": "8 18 28 * *"
     }
   ]
 }
