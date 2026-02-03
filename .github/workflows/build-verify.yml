@@ -23,7 +23,7 @@ jobs:
           node-version: 24.13.0
 
       - name: Npm install
-        run: npm ci
+        run: npm ci --force
 
       - name: Npm run Build
         run: npm run build
