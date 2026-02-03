@@ -6,7 +6,7 @@ export const nextFetch = async <T>(input: ApiRoutes, init: RequestInit = {}, coo
 
   if (cookie) {
     const { cookies } = await import("next/headers");
-    requestInit = { ...requestInit, headers: { Cookie: cookies().toString(), ...requestInit.headers } };
+    requestInit = { ...requestInit, headers: { Cookie: (await cookies()).toString(), ...requestInit.headers } };
   }
   const res: Response = await fetch(generateBaseUrl(input), requestInit);
   let result: any = res;
