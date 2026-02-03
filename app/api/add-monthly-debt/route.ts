@@ -9,7 +9,7 @@ const createMonthlyDebtSchema = z.object({
   content: z.string().min(1).max(100).optional(),
   amount: z.number().max(100_000_0000),
   category: z.string().min(1).max(50).optional(),
-  positionIndex: z.number().max(10),
+  positionIndex: z.number().max(50),
 });
 
 export async function POST(request: Request) {
